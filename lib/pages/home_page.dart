@@ -34,8 +34,8 @@ class HomePage extends StatelessWidget {
             }
           }
         },
-        child: const Icon(Icons.add),
         tooltip: 'Add Contact',
+        child: const Icon(Icons.add),
       ),
     );
   }
