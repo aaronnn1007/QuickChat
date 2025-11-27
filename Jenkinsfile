@@ -2,7 +2,7 @@ pipeline {
     agent any
     
     environment {
-        FLUTTER_HOME = 'C:\\flutter'
+        FLUTTER_HOME = 'C:\\Users\\aaron\\flutter\\flutter'
         PATH = "${FLUTTER_HOME}\\bin;${env.PATH}"
         DOCKER_IMAGE = 'quickchat'
         DOCKER_TAG = "${env.BUILD_NUMBER}"
@@ -82,7 +82,7 @@ pipeline {
             steps {
                 echo 'Deploying application...'
                 bat """
-                    docker run -d --name quickchat-app -p 8080:80 --restart unless-stopped ${DOCKER_IMAGE}:latest
+                    docker run -d --name quickchat-app -p 3000:80 --restart unless-stopped ${DOCKER_IMAGE}:latest
                 """
             }
         }
@@ -91,7 +91,7 @@ pipeline {
             steps {
                 echo 'Verifying deployment...'
                 bat 'docker ps -f name=quickchat-app'
-                echo 'Application deployed successfully at http://localhost:8080'
+                echo 'Application deployed successfully at http://localhost:3000'
             }
         }
     }
@@ -108,7 +108,7 @@ pipeline {
                     Build Number: ${env.BUILD_NUMBER}
                     Build URL: ${env.BUILD_URL}
                     
-                    Application is now running at http://localhost:8080
+                    Application is now running at http://localhost:3000
                 """,
                 to: '${DEFAULT_RECIPIENTS}'
             )
