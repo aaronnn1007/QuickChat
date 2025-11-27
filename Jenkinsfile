@@ -16,6 +16,16 @@ pipeline {
             }
         }
         
+        stage('Setup Flutter') {
+            steps {
+                echo 'Setting up Flutter safe directory...'
+                bat '''
+                    git config --global --add safe.directory C:/Users/aaron/flutter/flutter
+                    git config --global --add safe.directory C:/ProgramData/Jenkins/.jenkins/workspace/QuickChat-Pipeline
+                '''
+            }
+        }
+        
         stage('Flutter Doctor') {
             steps {
                 echo 'Running Flutter doctor...'
