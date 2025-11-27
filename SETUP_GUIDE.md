@@ -40,7 +40,7 @@ This will:
 ### 1.3 Run Container
 Run the container:
 ```powershell
-docker run -d --name quickchat-app -p 8080:80 --restart unless-stopped quickchat:latest
+docker run -d --name quickchat-app -p 3000:80 --restart unless-stopped quickchat:latest
 ```
 
 Or use Docker Compose (recommended):
@@ -54,7 +54,9 @@ Check running containers:
 docker ps
 ```
 
-Access your app: http://localhost:8080
+Access your app: http://localhost:3000
+
+**Note:** Port 3000 is used to avoid conflict with Jenkins on port 8080.
 
 View logs:
 ```powershell
@@ -171,14 +173,21 @@ Navigate to: **Manage Jenkins** → **System**
 Navigate to: **Manage Jenkins** → **Global Tool Configuration**
 
 Under **Environment Variables**:
-- Add `FLUTTER_HOME`: `C:\flutter` (or your Flutter SDK path)
+- Add `FLUTTER_HOME`: Your Flutter SDK path (e.g., `C:\Users\aaron\flutter\flutter`)
 - The Jenkinsfile already adds this to PATH
+
+**Important:** Find your Flutter path first:
+```powershell
+where.exe flutter
+# Example output: C:\Users\aaron\flutter\flutter\bin\flutter.bat
+# Use: C:\Users\aaron\flutter\flutter as FLUTTER_HOME
+```
 
 Or set system-wide:
 ```powershell
 # Run as Administrator
-[System.Environment]::SetEnvironmentVariable("FLUTTER_HOME", "C:\flutter", "Machine")
-[System.Environment]::SetEnvironmentVariable("PATH", "$env:PATH;C:\flutter\bin", "Machine")
+[System.Environment]::SetEnvironmentVariable("FLUTTER_HOME", "C:\Users\aaron\flutter\flutter", "Machine")
+[System.Environment]::SetEnvironmentVariable("PATH", "$env:PATH;C:\Users\aaron\flutter\flutter\bin", "Machine")
 ```
 
 ### 2.5 Create Jenkins Pipeline Job
@@ -249,8 +258,10 @@ For automatic builds on git push:
 
 #### Flutter not found
 ```powershell
-# Verify Flutter is in PATH for Jenkins service
-# Edit Jenkinsfile FLUTTER_HOME variable if needed
+# Find your Flutter installation path
+where.exe flutter
+# Update FLUTTER_HOME in Jenkinsfile to match your Flutter path
+# Example: FLUTTER_HOME = 'C:\\Users\\aaron\\flutter\\flutter'
 ```
 
 #### Docker permission denied
@@ -264,10 +275,12 @@ Restart-Service Jenkins
 
 #### Port already in use
 ```powershell
-# Check what's using port 8080
-netstat -ano | findstr :8080
+# If port 3000 is in use, change it in docker-compose.yml
+# Check what's using the port:
+netstat -ano | findstr :3000
 
-# Kill the process or change port in Jenkinsfile
+# Or use a different port like 3001
+# Update both docker-compose.yml and Jenkinsfile
 ```
 
 #### Build fails on Git checkout
@@ -295,7 +308,7 @@ netstat -ano | findstr :8080
    - Builds Flutter web app
    - Creates Docker image
    - Deploys to container
-4. **Access your app** at http://localhost:8080
+4. **Access your app** at http://localhost:3000
 
 ### 3.2 Manual Docker Deployment (Without Jenkins)
 
@@ -463,7 +476,7 @@ docker-compose up -d
 
 # 4. Verify
 docker ps
-# Access: http://localhost:8080
+# Access: http://localhost:3000
 ```
 
 ### After Code Changes
@@ -492,12 +505,13 @@ docker logs quickchat-app
 # Check logs for errors
 ```
 
-### Issue: Port 8080 already in use
+### Issue: Port 3000 already in use
 **Solution:**
 ```powershell
 # Change port in docker-compose.yml
 ports:
-  - "8081:80"  # Use 8081 instead
+  - "3001:80"  # Use 3001 instead
+# Also update the port in Jenkinsfile Deploy stage
 ```
 
 ### Issue: Jenkins can't find Flutter
@@ -518,8 +532,8 @@ After completing this guide, you should have:
 - ✅ Dockerized Flutter web application
 - ✅ Jenkins installed and configured
 - ✅ Automated CI/CD pipeline
-- ✅ Application running at http://localhost:8080
-- ✅ Jenkins dashboard at http://localhost:8090
+- ✅ Application running at http://localhost:3000
+- ✅ Jenkins dashboard at http://localhost:8090 (or 8080)
 - ✅ Automatic builds on git push
 - ✅ Containerized deployment
 - ✅ Monitoring and logging setup
