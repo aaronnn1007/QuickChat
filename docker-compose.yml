@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  quickchat-web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: quickchat-app
+    ports:
+      - "3000:80"
+    restart: unless-stopped
+    networks:
+      - quickchat-network
+
+networks:
+  quickchat-network:
+    driver: bridge

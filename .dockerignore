@@ -1,0 +1,55 @@
+# Flutter build artifacts
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+build/
+
+# IDE files
+.idea/
+.vscode/
+*.iml
+*.iws
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+
+# Documentation
+*.md
+!README.md
+
+# Test files
+test/
+test_driver/
+integration_test/
+
+# Docker files
+docker-compose*.yml
+Dockerfile*
+.dockerignore
+
+# CI/CD
+Jenkinsfile
+.github/
+
+# Logs
+*.log
+
+# Android/iOS specific (not needed for web build)
+android/.gradle/
+android/captures/
+android/local.properties
+android/key.properties
+ios/Pods/
+ios/.symlinks/
+ios/Flutter/.last_build_id
+macos/Pods/
+linux/.symlinks/
+windows/.symlinks/
